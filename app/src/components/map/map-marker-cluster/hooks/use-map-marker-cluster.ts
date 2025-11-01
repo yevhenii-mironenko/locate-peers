@@ -29,11 +29,13 @@ const MARKER_CONFIG: MarkerConfig = {
 type PopupConfig = {
   maxWidth: number
   className: string
+  closeOnClick: boolean
 }
 
 const POPUP_CONFIG: PopupConfig = {
   maxWidth: 300,
   className: 'custom-popup',
+  closeOnClick: false,
 }
 
 const customIcon = L.icon(MARKER_CONFIG)
@@ -41,6 +43,7 @@ const customIcon = L.icon(MARKER_CONFIG)
 export function useMapMarkerCluster(users: User[], map: Map) {
   const clusterRef = useRef<MarkerClusterGroup | null>(null)
   const usersHashRef = useRef<string>('')
+  const openPopupLatLngRef = useRef<L.LatLng | null>(null)
 
   const clusterGroup = useMemo(() => {
     return L.markerClusterGroup({
@@ -89,6 +92,19 @@ export function useMapMarkerCluster(users: User[], map: Map) {
     for (const user of users) {
       const marker = L.marker([user.lat, user.lon], { icon: customIcon })
       marker.bindPopup(createPopupHtml(user), POPUP_CONFIG)
+
+      marker.on('click', () => {
+        openPopupLatLngRef.current = marker.getLatLng()
+        map.setView([user.lat, user.lon], map.getZoom(), {
+          animate: true,
+          duration: 0.5,
+        })
+      })
+
+      marker.on('popupclose', () => {
+        openPopupLatLngRef.current = null
+      })
+
       markers.push(marker)
     }
 

@@ -9,7 +9,7 @@ type MapConfig = {
 
 export const MAP_CONFIG: MapConfig = {
   CENTER: [50.4501, 30.5234],
-  INITIAL_ZOOM: 10,
+  INITIAL_ZOOM: 0,
   MIN_ZOOM: 3,
   MAX_ZOOM: 19,
 }

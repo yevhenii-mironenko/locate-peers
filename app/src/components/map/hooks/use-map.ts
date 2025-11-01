@@ -1,8 +1,5 @@
-import type { LatLngBounds } from 'leaflet'
-import L from 'leaflet'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { INITIAL_BOUNDS } from '../../../constants/map.constants'
 import type { User } from '../../../types/user'
 import { isUsersArray } from '../../../utils/validate-users/validate-users'
 
@@ -10,7 +7,6 @@ export function useMap() {
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
-  const [bounds, setBounds] = useState<LatLngBounds | null>(null)
   const [interestFilter, setInterestFilter] = useState('')
 
   useEffect(() => {
@@ -44,24 +40,13 @@ export function useMap() {
 
     const normalizedFilter = interestFilter ? interestFilter.toLowerCase().trim() : null
 
-    const activeBounds =
-      bounds ??
-      L.latLngBounds(
-        [INITIAL_BOUNDS.LAT_MIN, INITIAL_BOUNDS.LON_MIN],
-        [INITIAL_BOUNDS.LAT_MAX, INITIAL_BOUNDS.LON_MAX]
-      )
-
     return allUsers.filter(user => {
       if (normalizedFilter) {
-        const hasInterest = user.interests.some(interest =>
-          interest.toLowerCase().includes(normalizedFilter)
-        )
-        if (!hasInterest) return false
+        return user.interests.some(interest => interest.toLowerCase().includes(normalizedFilter))
       }
-
-      return activeBounds.contains([user.lat, user.lon])
+      return true
     })
-  }, [bounds, allUsers, interestFilter])
+  }, [allUsers, interestFilter])
 
   const clearFilter = useCallback(() => {
     setInterestFilter('')
@@ -72,12 +57,10 @@ export function useMap() {
       allUsers,
       loading,
       error,
-      bounds,
       visibleUsers,
       interestFilter,
     },
     actions: {
-      setBounds,
       setInterestFilter,
       clearFilter,
     },

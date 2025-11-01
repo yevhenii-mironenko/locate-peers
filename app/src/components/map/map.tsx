@@ -5,7 +5,6 @@ import { ErrorScreen } from '../error-screen/error-screen'
 import { InterestFilter } from '../interest-filter/interest-filter'
 import { LoadingScreen } from '../loading-screen/loading-screen'
 import { useMap } from './hooks/use-map'
-import { MapBoundsTracker } from './map-bounds-tracker/map-bounds-tracker'
 import { MapMarkerCluster } from './map-marker-cluster/map-marker-cluster'
 
 export function Map() {
@@ -42,7 +41,6 @@ export function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ZoomControl position="bottomleft" />
-        <MapBoundsTracker onBoundsChange={actions.setBounds} />
         <MapMarkerCluster users={state.visibleUsers} />
       </MapContainer>
     </div>
