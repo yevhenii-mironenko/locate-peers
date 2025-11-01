@@ -16,7 +16,7 @@ export function useMap() {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetch('/users.json', { signal: controller.signal })
+    fetch(`${import.meta.env.BASE_URL}users.json`, { signal: controller.signal })
       .then(response => {
         if (!response.ok) throw new Error('Failed to fetch users')
         return response.json()
