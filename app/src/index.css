@@ -340,4 +340,7 @@ body {
   .interest-filter-icon {
     display: none;
   }
+  .leaflet-bottom.leaflet-left {
+    display: none;
+  }
 }
