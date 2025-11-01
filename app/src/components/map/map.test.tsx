@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { mockUsers } from '../../test/mocks/users.mock'
 import type { User } from '../../types/user'
+import { ErrorBoundary } from '../error-boundary/error-boundary'
 import { useMap } from './hooks/use-map'
 import { Map } from './map'
 
@@ -24,6 +25,7 @@ vi.mock('react-leaflet', () => ({
     <div data-testid="map-container">{children}</div>
   ),
   TileLayer: () => <div data-testid="tile-layer" />,
+  ZoomControl: () => <div data-testid="zoom-control" />,
   useMap: () => ({
     getBounds: vi.fn(() => ({
       contains: vi.fn(() => true),
@@ -58,7 +60,11 @@ describe('Map Component', () => {
   it('should load and display map with users', async () => {
     fetchMock.mockReturnValueOnce(createMockResponse(mockUsers))
 
-    render(<Map />)
+    render(
+      <ErrorBoundary>
+        <Map />
+      </ErrorBoundary>
+    )
 
     await waitFor(() => {
       expect(screen.getByTestId('map-container')).toBeInTheDocument()

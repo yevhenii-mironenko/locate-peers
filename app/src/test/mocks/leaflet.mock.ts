@@ -3,6 +3,8 @@ import { type Mock, vi } from 'vitest'
 type MockMarker = {
   bindPopup: Mock
   addTo: Mock
+  on: Mock
+  getLatLng: Mock
 }
 
 type MockMarkerClusterGroup = {
@@ -11,11 +13,14 @@ type MockMarkerClusterGroup = {
   clearLayers: Mock
   addTo: Mock
   remove: Mock
+  on: Mock
 }
 
 export const mockMarker: MockMarker = {
   bindPopup: vi.fn().mockReturnThis(),
   addTo: vi.fn().mockReturnThis(),
+  on: vi.fn().mockReturnThis(),
+  getLatLng: vi.fn(() => ({ lat: 50.4501, lng: 30.5234 })),
 }
 
 export const mockMarkerClusterGroup: MockMarkerClusterGroup = {
@@ -24,6 +29,7 @@ export const mockMarkerClusterGroup: MockMarkerClusterGroup = {
   clearLayers: vi.fn(),
   addTo: vi.fn(),
   remove: vi.fn(),
+  on: vi.fn().mockReturnThis(),
 }
 
 const mockBounds = {
@@ -40,4 +46,6 @@ vi.mock('leaflet', () => ({
   },
 }))
 
-vi.mock('leaflet.markercluster', () => ({}))
+vi.mock('leaflet.markercluster', () => ({
+  MarkerClusterGroup: vi.fn(() => mockMarkerClusterGroup),
+}))
