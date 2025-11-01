@@ -327,4 +327,18 @@ body {
   .interest-filter-container {
     padding: 10px;
   }
+  .interest-filter {
+    top: 10px;
+    width: 95%;
+  }
+  .interest-filter-input {
+    padding: 10px 40px 10px 10px;
+  }
+  .interest-filter-clear {
+    top: 2px;
+    right: 5px;
+  }
+  .interest-filter-icon {
+    display: none;
+  }
 }
